@@ -1,0 +1,12 @@
+/* stylesheet */
+
+#game-container {
+  /*left: 50%;
+  position: absolute;
+  top: 50%;*/
+}
+#game-canvas {
+  border: 1px solid black;
+  height: 100%;
+  width: 100%;
+}
