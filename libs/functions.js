@@ -1,5 +1,5 @@
 var container, canvas, canvasContext;
-var img;
+var img, player;
 var circle;
 var piskel;
 var x = y = 0;
@@ -9,7 +9,7 @@ const FPS = 30;
 
 function draw() {
 	canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-	canvasContext.drawImage(img, x, y);
+	canvasContext.drawImage(player.asset, player.x, player.y);
 }
 
 function init() {
@@ -21,29 +21,53 @@ function init() {
 }
 
 function loadAssets() {
-	img = new Image();
-	img.addEventListener("load", function() {
-		canvasContext.drawImage(this, x, y);
-	}, false);
-	img.src = "./assets/piskel.png";
+	player = {
+		x: 0,
+		y: 0,
+		width: 32,
+		height: 32,
+		asset: new Image(),
+		draw: function () {
+			this.asset.addEventListener("load", function() {
+				canvasContext.drawImage(this.asset, x, y, width, height);
+			}, false);
+			this.asset.src = "./assets/piskel.png";
+		}
+	}
+
+	player.draw();
 }
 
 function moveAsset(event) {
 	// 38, 39, 40, 37
 	switch(event.keyCode) {
 		case 38:
-			y -= moveSpeed;
+			player.y -= moveSpeed;
 			break;
 		case 39:
-			x += moveSpeed;
+			player.x += moveSpeed;
 			break;
 		case 40:
-			y += moveSpeed;
+			player.y += moveSpeed;
 			break;
 		case 37:
-			x -= moveSpeed;
+			player.x -= moveSpeed;
 			break;
 	}
+
+	// contain asset
+	if (player.x <= 0) {
+		player.x = 0;
+	} else if (player.x >= canvas.width) {
+		player.x = canvas.width - player.width;
+	}
+
+	if (player.y <= 0) {
+		player.y = 0;
+	} else if (player.y >= canvas.height) {
+		player.y = canvas.height - player.height;
+	}
+
 }
 
 function registerEvents() {
